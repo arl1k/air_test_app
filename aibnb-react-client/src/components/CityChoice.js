@@ -5,7 +5,8 @@ const cityOptions = [
     {value : "Paris, France", id : 1},
     {value : "London, UK", id : 2},
     {value : "New York, USA", id : 3},
-    {value : "Tel Aviv, Israel", id : 4}
+    {value : "Tel Aviv, Israel", id : 4},
+    {value : "Daugavpils, Latvia", id : 5}
 ]
 
 class CityChoice extends React.Component {

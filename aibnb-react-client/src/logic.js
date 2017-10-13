@@ -1,4 +1,4 @@
-var searchUrl = "https://www.airbnb.com/search/search_results?location=";
+var searchUrl = "https://api.airbnb.com/v2/search_results?client_id=3092nxybyb0otqw18e8nh5nty";
 var options = {
     method: 'GET',
     headers: {
@@ -9,7 +9,7 @@ var options = {
 exports.LoadFirstPagePropertiesByCity = function (cityName) {
     return LoadPropertiesByCityAndPage(cityName)
     .then(function(json) {
-        return RemoveDuplicatedProperties(json);
+        return json;
     })
 }
 
@@ -17,29 +17,25 @@ exports.LoadAllPropertiesByCity = LoadAllPropertiesByCity;
 function LoadAllPropertiesByCity(cityName, page = 2, responceProperties = []) {
     return LoadPropertiesByCityAndPage(cityName, page)
         .then(function (json) {
+            console.log(json.length);
+            console.log(page);
             if (json.length > 0) {
                 responceProperties = responceProperties.concat(json)
                 return LoadAllPropertiesByCity(cityName, ++page, responceProperties)
             }
             else {
-                return RemoveDuplicatedProperties(responceProperties);
+                return responceProperties;
             }
         })
 }
 
 function LoadPropertiesByCityAndPage(cityName, page = 0) {
-    return fetch(searchUrl + encodeURIComponent(/*cityName*/"Daugavpils, Latvia") + "&page=" + page, options)
+    console.log(searchUrl)
+    return fetch(searchUrl +"&" + "location=Daugavpils%2C%20Latvia&_limit=50", options) //todo! 
         .then(response => {
             return response.json();
         })
         .then(json => {
-            return json.results_json.search_results;
+            return json.search_results;
         })
-}
-
-// Airbnb return properties with same Id 
-function RemoveDuplicatedProperties(responceProperties) {
-    return responceProperties.filter((prop, index, propertiesArr) => {
-        return propertiesArr.map(mapObj => mapObj.listing.id).indexOf(prop.listing.id) === index;
-    });
 }

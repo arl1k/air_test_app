@@ -19,11 +19,19 @@ class App extends Component {
     console.log()
     return logic.LoadFirstPagePropertiesByCity(cityName) //load first page
       .then(json => {
+        console.log(json.length)
         this.setState({ properties: this.state.properties.concat(json) })
-        return logic.LoadAllPropertiesByCity(cityName) //load all the rest
-      })
-      .then(json => {
-        this.setState({ properties: this.state.properties.concat(json) })
+      //   return logic.LoadAllPropertiesByCity(cityName) //load all the rest
+      // })
+      // .then(json => {
+
+      //   let allProps = this.state.properties.concat(json);
+      //   // Airbnb return properties with same Id, remove from list 
+      //   allProps = allProps.filter((prop, index, propertiesArr) => {
+      //     return propertiesArr.map(mapObj => mapObj.listing.id).indexOf(prop.listing.id) === index;
+      //   });
+
+      //   this.setState({ properties: allProps })
       })
       .catch(err => {
         console.log(err)
