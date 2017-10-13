@@ -26,3 +26,30 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.logoImg {
+  width: 20%;
+}
+
+div.logo{
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.mainPictureContainer {
+  width : 100%;
+  height: 300px;
+  overflow: auto;
+}
+
+.mainPicture {
+  height: auto;
+  max-width: 100%;
+}
+
+.propContainer{
+  padding-bottom: 10px
+}

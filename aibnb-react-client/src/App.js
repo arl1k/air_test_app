@@ -1,51 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './airbnblogo.svg';
 import './App.css';
 import CityChoice from './components/CityChoice';
-import PropertiesRow from './components/propertiesrow';
+import PropertiesList from './components/propertiesrow';
+import logic from './logic';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       error: '',
-      searchUrl: "https://www.airbnb.com/search/search_results?location=" + encodeURIComponent(/*cityName*/"Daugavpils, Latvia"),
-      limit: 18,
-      properties : []
+      properties: []
     }
     this.loadProperties = this.loadProperties.bind(this);
   }
 
-  loadProperties(str) {
-    console.log(str) //option choice
-    var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    fetch(proxyUrl + "https://www.airbnb.com/search/search_results?location=" + encodeURIComponent(/*cityName*/"Daugavpils, Latvia") + "&page=4-", {
-      method: 'GET',
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-      }
-    })
-      .then(response => {
-        return response.json();
-      }).then(json => {
-        json = json.results_json.search_results;
-        this.state.properties = json;
-        console.log(json);
-      }).catch(err => {
+  loadProperties(cityName) {
+    console.log()
+    return logic.LoadFirstPagePropertiesByCity(cityName) //load first page
+      .then(json => {
+        this.setState({ properties: this.state.properties.concat(json) })
+        return logic.LoadAllPropertiesByCity(cityName) //load all the rest
+      })
+      .then(json => {
+        this.setState({ properties: this.state.properties.concat(json) })
+      })
+      .catch(err => {
         console.log(err)
       })
   }
 
   render() {
+
     return (
-      <div id="maincontainer">
+      <div id="maincontainer" >
+        <div className="logo">
+          <img src={logo} className="logoImg"></img>
+        </div>
         <h1> Wellcome to Airbnb helper </h1>
-        <div id="choicecontainer">
-          <CityChoice search={this.loadProperties} />
-        </div>
-        <div id="propertiescontainer">
-            <PropertiesRow items={this.state.properties}/>
-        </div>
+        <hr />
+        <CityChoice search={this.loadProperties} />
+        <hr />
+        <PropertiesList items={this.state.properties}/>
       </div>
     )
   }
@@ -53,28 +49,3 @@ class App extends Component {
 
 
 export default App;
-
-
-// var airbnbObj = {};
-// airbnbObj.listing = {
-//   bathrooms: number,
-//   bedrooms: number,
-//   beds: number,
-//   star_rating: number,
-//   id: 21221274(number),
-//   name: "",
-//   picture_url: "main picture",
-//   picture_urls: ['all pictures'],
-//   room_type: "",
-//   user: {
-//     first_name: "",
-//     id: number
-//   }
-// }
-
-// airbnbObj.pricing_quote = {
-//   rate: {
-//     amount: number,
-//     currency: "ILS"
-//   }
-// }

@@ -20,8 +20,8 @@ class CityChoice extends React.Component {
         this.SetChosenCity = this.SetChosenCity.bind(this)
     }
 
-    SetChosenCity(e) {
-        this.setState({ selectValue: e.target.value });
+    SetChosenCity(event) {
+        this.setState({ selectValue: event.target.options[event.target.selectedIndex].text });
     }
 
     SearchProperties(event) {
@@ -35,18 +35,18 @@ class CityChoice extends React.Component {
 
     render() {
         return (
-            <div>
+            <div id="choicecontainer">
                 <label>please select the city</label>
                 <select className="cityselect" onChange={this.SetChosenCity} onClick={this.RemoveDefaultOption}>
 
                     {cityOptions.map(option => {
-                        return <CityOption name={option.value} key={option.id} id={option.id}/>
+                        return <CityOption name={option.value} key={option.id} id={option.id} />
                     })}
 
-                }
+                    }
                 </select>
                 <button id="search" onClick={this.SearchProperties}>Search</button>
-                <hr /></div>
+            </div>
         )
     }
 }
