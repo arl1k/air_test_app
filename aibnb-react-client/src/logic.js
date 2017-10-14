@@ -6,36 +6,21 @@ var options = {
     }
 }
 
-exports.LoadFirstPagePropertiesByCity = function (cityName) {
-    return LoadPropertiesByCityAndPage(cityName)
-    .then(function(json) {
-        return json;
-    })
-}
+exports.LoadProperties = function(cityName, offset = 0) {
+    let offsetStr = "";
+    if(offset) {
+        offsetStr = "&_offset=" + offset;
+    }
 
-exports.LoadAllPropertiesByCity = LoadAllPropertiesByCity;
-function LoadAllPropertiesByCity(cityName, page = 2, responceProperties = []) {
-    return LoadPropertiesByCityAndPage(cityName, page)
-        .then(function (json) {
-            console.log(json.length);
-            console.log(page);
-            if (json.length > 0) {
-                responceProperties = responceProperties.concat(json)
-                return LoadAllPropertiesByCity(cityName, ++page, responceProperties)
-            }
-            else {
-                return responceProperties;
-            }
-        })
-}
-
-function LoadPropertiesByCityAndPage(cityName, page = 0) {
-    console.log(searchUrl)
-    return fetch(searchUrl +"&" + "location=Daugavpils%2C%20Latvia&_limit=50", options) //todo! 
+    return fetch(searchUrl + "&" + "location=" + encodeURIComponent(cityName) + "&_limit=50" + offsetStr, options)
         .then(response => {
             return response.json();
         })
         .then(json => {
             return json.search_results;
         })
+}
+
+exports.LoadReviews = function() {
+    
 }

@@ -12,29 +12,42 @@ class App extends Component {
       error: '',
       properties: []
     }
-    this.loadProperties = this.loadProperties.bind(this);
+    this.LoadProperties = this.LoadProperties.bind(this);
+    this.SetProperties = this.SetProperties.bind(this);
   }
 
-  loadProperties(cityName) {
-    console.log()
-    return logic.LoadFirstPagePropertiesByCity(cityName) //load first page
+  SetProperties(json) {
+    if (json.length > 0) {
+      let allProps = this.state.properties.concat(json);
+      // Airbnb return properties with same Id, remove from list 
+      allProps = allProps.filter((prop, index, propertiesArr) => {
+        return propertiesArr.map(mapObj => mapObj.listing.id).indexOf(prop.listing.id) === index;
+      });
+      this.setState({ properties: allProps })
+    }
+  }
+
+  LoadProperties(cityName, offset = 0) {
+
+    if(offset == 0) { //first call clear properties
+      this.setState({ properties: [] })
+    }
+
+    return logic.LoadProperties(cityName, offset)
       .then(json => {
-        console.log(json.length)
-        this.setState({ properties: this.state.properties.concat(json) })
-      //   return logic.LoadAllPropertiesByCity(cityName) //load all the rest
-      // })
-      // .then(json => {
-
-      //   let allProps = this.state.properties.concat(json);
-      //   // Airbnb return properties with same Id, remove from list 
-      //   allProps = allProps.filter((prop, index, propertiesArr) => {
-      //     return propertiesArr.map(mapObj => mapObj.listing.id).indexOf(prop.listing.id) === index;
-      //   });
-
-      //   this.setState({ properties: allProps })
+        if (json) {
+          this.SetProperties(json);
+          //airbnb responses "Bad Request" if offet >= 1000.
+          if (json.length < 50) {
+            return true;
+          }
+          else {
+            return this.LoadProperties(cityName, offset + 50)
+          }
+        }
       })
-      .catch(err => {
-        console.log(err)
+      .catch(function (err) {
+        console.log(err);
       })
   }
 
@@ -47,9 +60,9 @@ class App extends Component {
         </div>
         <h1> Wellcome to Airbnb helper </h1>
         <hr />
-        <CityChoice search={this.loadProperties} />
+        <CityChoice search={this.LoadProperties} />
         <hr />
-        <PropertiesList items={this.state.properties}/>
+        <PropertiesList items={this.state.properties} />
       </div>
     )
   }
