@@ -64,10 +64,42 @@ h1 {
 }
 
 .propContainer{
-  padding-bottom: 10px
+  padding-bottom: 10px;
+}
+
+.list-group-item:hover{
+  cursor: pointer; 
 }
 
 .nameContainer {
   font-size: small;
   text-align: center;
+}
+
+.modal-container {
+  position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+
+.modpicturecontainer{
+  height: 25vh;
+}
+
+.modalImage {
+  height :100%;
+  width :100%;
+  overflow: auto;
+  text-align: left;
+}
+
+#choicecontainer {
+  margin-left : 50px
+}
+
+#citySelectLabel {
+  padding : 10px;
+  font-size : larger;
+  font-family: cursive;
 }

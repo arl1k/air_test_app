@@ -1,17 +1,18 @@
 import React from 'react';
 import { ListGroup, ListGroupItem, Col } from 'react-bootstrap/lib/';
 
-const PropertiesList = ({items}) => {
+const PropertiesList = ({items, onclickFunction}) => {
 
-    let property = items.map((property) => {
+    let property = items.map((property, index) => {
         return (
-          <Col sm={4} md={3}  key={property.listing.id} className='propContainer' data-propid={property.listing.id}>
-            <ListGroupItem >
+          <Col sm={4} md={3}  key={property.listing.id} className='propContainer' data-propid={property.listing.id} >
+            <ListGroupItem data-propid={property.listing.id} onClick={onclickFunction}>
             <div className="mainPictureContainer">
-                <img className="mainPicture" src={property.listing.picture_url}></img>
+                <img className="mainPicture" alt="" src={property.listing.picture_url}></img>
             </div>
             <div className="nameContainer">
-                <span> <b>{property.listing.name}</b></span>
+                <span> <b>{property.listing.name}</b></span><br/> 
+                <span> <b>In : {property.listing.neighborhood}</b></span>
             </div>
             </ListGroupItem>
           </Col>
@@ -19,7 +20,7 @@ const PropertiesList = ({items}) => {
       });
     
     return (
-        <ListGroup sm={3} md={4}>
+        <ListGroup>
           {property}
         </ListGroup>
       )
@@ -27,28 +28,3 @@ const PropertiesList = ({items}) => {
 
 
 export default PropertiesList;
-
-
-// var airbnbObj = {};
-// airbnbObj.listing = {
-//   bathrooms: number,
-//   bedrooms: number,
-//   beds: number,
-//   star_rating: number,
-//   id: 21221274(number),
-//   name: "",
-//   picture_url: "main picture",
-//   picture_urls: ['all pictures'],
-//   room_type: "",
-//   user: {
-//     first_name: "",
-//     id: number
-//   }
-// }
-
-// airbnbObj.pricing_quote = {
-//   rate: {
-//     amount: number,
-//     currency: "ILS"
-//   }
-// }

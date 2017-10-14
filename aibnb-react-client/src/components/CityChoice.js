@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap/lib/';
 
 const cityOptions = [
     {value : "Select an Option", id : 0},
@@ -6,7 +7,6 @@ const cityOptions = [
     {value : "London, UK", id : 2},
     {value : "New York, USA", id : 3},
     {value : "Tel Aviv, Israel", id : 4},
-    {value : "Daugavpils, Latvia", id : 5}
 ]
 
 class CityChoice extends React.Component {
@@ -37,8 +37,8 @@ class CityChoice extends React.Component {
     render() {
         return (
             <div id="choicecontainer">
-                <label>please select the city</label>
-                <select className="cityselect" onChange={this.SetChosenCity} onClick={this.RemoveDefaultOption}>
+                <label id="citySelectLabel">Select the city from the list : </label>
+                <select className="cityselect" onChange={this.SetChosenCity} onClick={this.RemoveDefaultOption} style={{"padding" : "6px"}}>
 
                     {cityOptions.map(option => {
                         return <CityOption name={option.value} key={option.id} id={option.id} />
@@ -46,7 +46,7 @@ class CityChoice extends React.Component {
 
                     }
                 </select>
-                <button id="search" onClick={this.SearchProperties}>Search</button>
+                <Button id="search" onClick={this.SearchProperties} style={{"marginLeft" : "10px"}}>Do Search</Button>
             </div>
         )
     }
@@ -56,7 +56,7 @@ class CityOption extends React.Component {
 
     render() {
         return (
-            <option className="cityoption" value={this.props.id}>{this.props.name}</option>
+            <option className="cityoption" value={this.props.id} style={{"padding" : "6px"}}>{this.props.name}</option>
         )
     }
 }
