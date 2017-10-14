@@ -81,7 +81,6 @@ class App extends Component {
           this.SetProperties(json);
           //airbnb responses "Bad Request" if offet >= 1000.
           if (json.length < 50 || offset >= 950) {
-            console.log(offset)
             this.setState({ cityChoiceButtonDisabled: false })
             return true;
           }
@@ -112,7 +111,6 @@ class App extends Component {
       this.setState({ reviews: this.state.reviews.concat(json) })
       if (json) {
         if (json.length < 10 || this.state.stopLoadReviews) {
-          console.log(this.state.stopLoadReviews)
           return true;
         }
         else {
