@@ -35,6 +35,7 @@ class CityChoice extends React.Component {
     }
 
     render() {
+        let buttonStr = this.props.cityChoiceButtonDisabled?"Results are loading" : "Do Search"
         return (
             <div id="choicecontainer">
                 <label id="citySelectLabel">Select the city from the list : </label>
@@ -46,7 +47,7 @@ class CityChoice extends React.Component {
 
                     }
                 </select>
-                <Button id="search" onClick={this.SearchProperties} style={{"marginLeft" : "10px"}}>Do Search</Button>
+                <Button id="search" onClick={this.SearchProperties} style={{"marginLeft" : "10px"}} disabled={this.props.cityChoiceButtonDisabled}>{buttonStr}</Button>
             </div>
         )
     }

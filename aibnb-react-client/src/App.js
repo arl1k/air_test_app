@@ -25,7 +25,10 @@ class App extends Component {
       propertyCurrency : "",
       propertyNumberOfGuests : 0,
       propertyNumOfReviews : 0,
-      propertyId : ''
+      propertyId : '',
+      cityChoiceButtonDisabled : false,
+      reviewButtonDisabled : false,
+      stopLoadReviews : false
     }
     this.LoadProperties = this.LoadProperties.bind(this);
     this.SetProperties = this.SetProperties.bind(this);
@@ -51,8 +54,7 @@ class App extends Component {
       propertyPrice: property.pricing_quote.localized_nightly_price,
       propertyCurrency: property.pricing_quote.localized_currency,
       propertyNumberOfGuests : property.pricing_quote.guests,
-      propertyNumOfReviews : property.listing.reviews_count,
-      reviewButtonDisabled : false
+      propertyNumOfReviews : property.listing.reviews_count
     });
   }
 
@@ -72,13 +74,15 @@ class App extends Component {
     if(offset === 0) { //first call clear properties
       this.setState({ properties: [] })
     }
-
+    this.setState({ cityChoiceButtonDisabled: true })
     return logic.LoadProperties(cityName, offset)
       .then(json => {
         if (json) {
           this.SetProperties(json);
           //airbnb responses "Bad Request" if offet >= 1000.
-          if (json.length < 50) {
+          if (json.length < 50 || offset >= 950) {
+            console.log(offset)
+            this.setState({ cityChoiceButtonDisabled: false })
             return true;
           }
           else {
@@ -87,6 +91,7 @@ class App extends Component {
         }
       })
       .catch(function (err) {
+        this.setState({ cityChoiceButtonDisabled: false })
         console.log(err);
       })
   }
@@ -106,7 +111,8 @@ class App extends Component {
     .then(json => {
       this.setState({ reviews: this.state.reviews.concat(json) })
       if (json) {
-        if (json.length < 10) {
+        if (json.length < 10 || this.state.stopLoadReviews) {
+          console.log(this.state.stopLoadReviews)
           return true;
         }
         else {
@@ -120,7 +126,8 @@ class App extends Component {
   }
 
   render() {
-    let closeModal = () => this.setState({ showModal: false, reviews: []});
+    let closeModal = () => this.setState({ showModal: false, stopLoadReviews : true});
+    let showModal = () => this.setState({ reviews: [] });
     return (
       <div id="maincontainer" >
         <div className="logo">
@@ -128,11 +135,12 @@ class App extends Component {
         </div>
         <h1> Wellcome to Airbnb helper </h1>
         <hr />
-        <CityChoice search={this.LoadProperties} />
+        <CityChoice search={this.LoadProperties} cityChoiceButtonDisabled={this.state.cityChoiceButtonDisabled}/>
         <hr />
         <PropertiesList items={this.state.properties} onclickFunction={this.PropertyClickHandler}/>
         <DetailsModal 
           show={this.state.showModal} 
+          onShow={showModal}
           onHide={closeModal} 
           propertyId={this.state.propertyId}
           propertyName={this.state.propertyName}
